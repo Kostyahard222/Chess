@@ -11,14 +11,13 @@ import android.view.Window;
 import androidx.appcompat.app.AppCompatActivity;
 
 class MyDraw extends View {
+    static Paint paint = new Paint();
     public MyDraw(Context context) {
         super(context);
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setARGB(255, 157, 224, 180); //задний фон изумрудного цвета
         canvas.drawPaint(paint);
@@ -60,7 +59,9 @@ class MyDraw extends View {
         canvas.drawRect(15 + tilewidth * 3, center - (tilewidth * (-3)), 15 + tilewidth * 3 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
         canvas.drawRect(15 + tilewidth * 5, center - (tilewidth * (-3)), 15 + tilewidth * 5 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
         canvas.drawRect(15 + tilewidth * 7, center - (tilewidth * (-3)), 15 + tilewidth * 7 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
-        paint.setColor(Color.argb(255, 144, 77, 48)); //черные клетки
+    }
+    static void GridUpdate(int[][] x){
+
     }
 }
 class figure{
@@ -87,14 +88,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int[][] grid = new int[8][8];
-        for (int i=0;i<8;i++) for (int j =0;j<8;j++) grid[i][j]=0;
-        for (int i=0;i<8;i++){
-            grid[1][i]=1;
-            grid[6][i]=7;
-        }
-        grid[0][0]=4;grid[0][7]=4;grid[0][1]=6;grid[0][6]=6;grid[0][2]=5;grid[0][5]=5;grid[0][3]=2;grid[0][4]=3;
-        grid[7][0]=10;grid[7][7]=10;grid[7][1]=12;grid[7][6]=12;grid[7][2]=11;grid[7][5]=11;grid[7][3]=8;grid[7][4]=9;
+        int[][] grid =
+                {
+                        {4, 6, 5, 3, 2, 5, 6, 4},
+                        {1, 1, 1, 1, 1, 1, 1, 1},
+                        {0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0},
+                        {7, 7, 7, 7, 7, 7, 7, 7},
+                        {10, 12, 11, 9, 8, 11, 12, 10}
+                };
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
