@@ -1,6 +1,7 @@
 package com.example.chess;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,6 +16,7 @@ class MyDraw extends View {
     public MyDraw(Context context) {
         super(context);
     }
+    int center = getHeight() / 2, tilewidth = (getWidth() - 30) / 8;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -24,9 +26,9 @@ class MyDraw extends View {
         paint.setAntiAlias(true);
         int center = getHeight() / 2;
         int tilewidth = (getWidth() - 30) / 8;
-        paint.setColor(Color.argb(255, 252, 252, 238)); //белые клетки
-        canvas.drawRect(15, center - (tilewidth * 4), 15 + tilewidth * 8, center + (tilewidth * 4), paint);
         paint.setColor(Color.argb(255, 144, 77, 48)); //черные клетки
+        canvas.drawRect(15, center - (tilewidth * 4), 15 + tilewidth * 8, center + (tilewidth * 4), paint);
+        paint.setColor(Color.argb(255, 252, 252, 238)); //белые клетки
         canvas.drawRect(15, center - (tilewidth * 4), 15 + tilewidth, center - (tilewidth * 4) + tilewidth, paint);
         canvas.drawRect(15 + tilewidth * 2, center - (tilewidth * 4), 15 + tilewidth * 2 + tilewidth, center - (tilewidth * 4) + tilewidth, paint);
         canvas.drawRect(15 + tilewidth * 4, center - (tilewidth * 4), 15 + tilewidth * 4 + tilewidth, center - (tilewidth * 4) + tilewidth, paint);
@@ -60,9 +62,6 @@ class MyDraw extends View {
         canvas.drawRect(15 + tilewidth * 5, center - (tilewidth * (-3)), 15 + tilewidth * 5 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
         canvas.drawRect(15 + tilewidth * 7, center - (tilewidth * (-3)), 15 + tilewidth * 7 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
     }
-    static void GridUpdate(int[][] x){
-
-    }
 }
 class figure{
     int X,Y,id; //хз зачем х и у пусть пока будут
@@ -84,6 +83,17 @@ class wpawn extends figure{ //белая пешка
     public void availablemoves() {
     }
 }
+class GridUpdate implements MyDraw{ // эта хуйня должна написать цифры поверх поля
+    // но она не работает
+    // почему? в душе не ебу
+    public GridUpdate(Canvas canvas, int[][]) {
+        int CenterStatic = this.center; // это была попытка наебать систему и не трогать getHeight в int'е
+        int center = getHeight() / 2;
+        int tilewidth = (getWidth() - 30) / 8;
+        int startingtop = center - (tilewidth * 4);
+        canvas.drawText();
+    }
+}
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -100,8 +110,10 @@ public class MainActivity extends AppCompatActivity {
                         {10, 12, 11, 9, 8, 11, 12, 10}
                 };
         super.onCreate(savedInstanceState);
+        Intent i= new Intent(MainActivity.this, GridUpdate) // это была попытка реализовать переход на условный апдейт поля
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         setContentView(new MyDraw(this));
+        MyDraw.GridUpdate(grid); // это не работает т.к. она не дает сделать апдейт статичным
     }
 }
