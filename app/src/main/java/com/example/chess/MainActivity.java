@@ -1,5 +1,6 @@
 package com.example.chess;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 class MyDraw extends View {
     static Paint paint = new Paint();
+    static Canvas ss; // это сделано что бы выдрать входящий канвас и дальше его использовать
     public MyDraw(Context context) {
         super(context);
     }
@@ -20,6 +22,7 @@ class MyDraw extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        ss = canvas; // вот от сюда и выдран канвас
         paint.setStyle(Paint.Style.FILL);
         paint.setARGB(255, 157, 224, 180); //задний фон изумрудного цвета
         canvas.drawPaint(paint);
@@ -62,6 +65,22 @@ class MyDraw extends View {
         canvas.drawRect(15 + tilewidth * 5, center - (tilewidth * (-3)), 15 + tilewidth * 5 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
         canvas.drawRect(15 + tilewidth * 7, center - (tilewidth * (-3)), 15 + tilewidth * 7 + tilewidth, center - (tilewidth * (-3)) + tilewidth, paint);
     }
+    public void GridUpdate(int[][] o) {
+        paint.setAntiAlias(true);
+        paint.setTextSize(55.0f);
+        paint.setColor(Color.WHITE);
+        float center = getHeight() / 2;
+        float tilewidth = (getWidth() - 30) / 8;
+        float startingtop = center - (tilewidth * 4);
+        for (int i = 0;i<8;i++){
+            for (int j = 0;j<8;j++){
+        ss.drawText("" + o[7-i][j],center-(tilewidth*4)+(tilewidth*i)+tilewidth/2,15+(tilewidth*j)+tilewidth/2,paint); // эта строка вызывает ошибку с нулевым референсом
+                // жаль что не жожо референсом
+            }
+        }
+    }
+
+
 }
 class figure{
     int X,Y,id; //хз зачем х и у пусть пока будут
@@ -83,17 +102,6 @@ class wpawn extends figure{ //белая пешка
     public void availablemoves() {
     }
 }
-class GridUpdate implements MyDraw{ // эта хуйня должна написать цифры поверх поля
-    // но она не работает
-    // почему? в душе не ебу
-    public GridUpdate(Canvas canvas, int[][]) {
-        int CenterStatic = this.center; // это была попытка наебать систему и не трогать getHeight в int'е
-        int center = getHeight() / 2;
-        int tilewidth = (getWidth() - 30) / 8;
-        int startingtop = center - (tilewidth * 4);
-        canvas.drawText();
-    }
-}
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -110,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
                         {10, 12, 11, 9, 8, 11, 12, 10}
                 };
         super.onCreate(savedInstanceState);
-        Intent i= new Intent(MainActivity.this, GridUpdate) // это была попытка реализовать переход на условный апдейт поля
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        setContentView(new MyDraw(this));
-        MyDraw.GridUpdate(grid); // это не работает т.к. она не дает сделать апдейт статичным
+        MyDraw z = new MyDraw(getApplicationContext()); // z не потому что Россия, а потому что первое пришло в голову
+        setContentView(z); // я в душе не ебу что я тут сделал, но кажется оно работает (нет)
+        z.GridUpdate(grid);
     }
 }
